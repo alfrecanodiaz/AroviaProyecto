@@ -1,0 +1,159 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mapa Social - Arovia</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://geo.stp.gov.py/dist/themes/css/cartodb.css" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+
+  <script type="infowindow/html" id="infowindow_template">
+<div class="cartodb-popup v2">
+ 
+      <a href="#close" class="cartodb-popup-close-button close">x</a>
+ 
+       <div class="cartodb-popup-content-wrapper">
+
+       <div class="container">
+        <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#menu1">Menu 1</a></li>
+        <li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
+        </ul>
+
+         <p align="center"><img width="475" height="175" src="{{_url}}" /></p>
+
+<div class="tab-content">
+
+         <div class="cartodb-popup-content">
+
+<div id="menu1" class="tab-pane fade in active">
+
+      <h4>nombre_municipio</h4>
+      <p>{{nombre_municipio}}</p>
+      <h4>fecha_creacion</h4>
+      <p>{{fecha_creacion}}</p>
+      <h4>superficie</h4>
+      <p>{{superficie}}</p>
+      <h4>poblacion</h4>
+      <p>{{poblacion}}</p>
+      <h4>consejo_de_desarrollo_distrital</h4>
+      <p>{{consejo_de_desarrollo_distrital}}</p>
+      <h4>plan_de_desarrollo_distrital</h4>
+      <p>{{plan_de_desarrollo_distrital}}</p>
+      <h4>plan_de_ordenamiento_territorial</h4>
+      <p>{{plan_de_ordenamiento_territorial}}</p>
+      <h4>actividades_economicas</h4>
+      <p>{{actividades_economicas}}</p>
+      <h4>temas_prioritarios_distritales</h4>
+      <p>{{temas_prioritarios_distritales}}</p>
+      <h4>desafios_distritales</h4>
+      <p>{{desafios_distritales}}</p>
+      <h4>instituciones_publicas</h4>
+      <p>{{instituciones_publicas}}</p>
+      <h4>linea_de_accion</h4>
+      <p>{{linea_de_accion}}</p>
+      <h4>instituciones_privadas</h4>
+      <p>{{instituciones_privadas}}</p>
+      <h4>organizaciones_de_la_sociedad_civil</h4>
+      <p>{{organizaciones_de_la_sociedad_civil}}</p>
+
+      </div>
+
+      <div id="menu2" class="tab-pane fade">
+<!-- content -->
+
+	</div>
+
+      </div>
+         </div>
+       </div>
+       <div class="cartodb-popup-tip-container"></div>
+    </div>
+    </div>
+
+  </script>
+
+      <!-- include cartodb.js library -->
+    <script src="http://geo.stp.gov.py/dist/cartodb.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    <script>
+
+
+    function main() {
+ 
+      var map = L.map('map', { 
+            title: true,
+            description: true,            
+            tiles_loader: true,
+            center_lat: 0,
+            center_lon: 0,
+            center: [-25.1447, -56.3435],
+            zoom: 8
+      })
+
+      cartodb.createLayer(map, 'http://geo.stp.gov.py/user/arovia/api/v2/viz/38f70996-4a03-11e6-a4f5-b6fa9714a3b6/viz.json')
+       .on('done', function(layer) {
+ 
+        map.addLayer(layer);
+ 
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'MapBox'
+      }).addTo(map);
+ 
+      cartodb.createLayer(map, 'http://geo.stp.gov.py/user/arovia/api/v2/viz/95837114-3d41-11e6-87ee-b6fa9714a3b6/viz.json')
+       .on('done', function(layer) {
+ 
+        map.addLayer(layer);
+
+        // get sublayer 0 and set the infowindow template
+        var sublayer = layer.getSubLayer(0);
+ 
+        sublayer.infowindow.set('template', $('#infowindow_template').html());
+
+      }).addTo(map);
+
+        layer.on('featureOver', function(e, pos, latlng, data) {
+          console.log(e, pos, latlng, data);
+        });
+ 
+        layer.on('error', function(err) {
+          console.log('error: ' + err);
+        });
+
+      }).on('error', function() {
+        console.log("some error occurred");
+      });
+ 
+    }
+ 
+    window.onload = main;
+  
+      $(document).ready(function(){
+      $(".nav-tabs a").click(function(){
+      $(this).tab('show');
+      });
+      });
+    </script>
+
+</html>
+
