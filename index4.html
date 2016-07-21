@@ -1,0 +1,136 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mapa Social - Arovia</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+
+    <link rel="stylesheet" href="http://geo.stp.gov.py/dist/themes/css/cartodb.css" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+
+  <script type="infowindow/html" id="infowindow_template">
+<div class="cartodb-popup v2">
+ 
+      <a href="#close" class="cartodb-popup-close-button close">x</a>
+ 
+       <div class="cartodb-popup-content-wrapper">
+
+       <div class="container">
+        <ul class="nav nav-tabs"">
+        <li class="active"><a data-toggle="tab" href="#menu1">Menu 1</a></li>
+        <li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
+        </ul>
+
+         <p align="center"><img width="475" height="175" src={{_url}} /></p>
+
+<div class="tab-content">
+
+         <div class="cartodb-popup-content">
+
+			<div id="menu1" class="tab-pane fade in active">
+
+      			<h4>nombre_municipio</h4>
+      			<p>{{nombre_municipio}}</p>
+      			<h4>fecha_creacion</h4>
+      			<p>{{fecha_creacion}}</p>
+      			<h4>superficie</h4>
+      			<p>{{superficie}}</p>
+      			<h4>poblacion</h4>
+      			<p>{{poblacion}}</p>
+
+      		</div>
+
+			<div id="menu2" class="tab-pane fade">
+
+      			<h4>consejo_de_desarrollo_distrital</h4>
+      			<p>{{consejo_de_desarrollo_distrital}}</p>
+      			<h4>plan_de_desarrollo_distrital</h4>
+      			<p>{{plan_de_desarrollo_distrital}}</p>
+      			<h4>plan_de_ordenamiento_territorial</h4>
+      			<p>{{plan_de_ordenamiento_territorial}}</p>
+      			<h4>actividades_economicas</h4>
+      			<p>{{actividades_economicas}}</p>
+
+			</div>
+
+      </div>
+         </div>
+       </div>
+       <div class="cartodb-popup-tip-container"></div>
+    </div>
+    </div>
+  </script>
+
+      <!-- include cartodb.js library -->
+    <script src="http://geo.stp.gov.py/dist/cartodb.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    <script>
+
+      function main() {
+        cartodb.createVis(map, 'http://geo.stp.gov.py/user/arovia/api/v2/viz/77a4d500-f040-11e5-a1c6-b6fa9714a3b6/viz.json', {
+            title: true,
+            description: true,            
+            tiles_loader: true,
+            center_lat: 0,
+            center_lon: 0,
+            zoom: 8
+        })
+
+         .on('done', function(vis,layers) {
+         	
+           // get sublayer 0 and set the infowindow template (se cambia "getSubLayer(NRO CAPA)")
+           var sublayer = layers[1].getSubLayer(3);
+
+           sublayer.infowindow.set('sanitizeTemplate',false);
+
+           sublayer.infowindow.set('template', $('#infowindow_template').html());
+
+           // get sublayer 0 and set the infowindow template (se cambia "getSubLayer(NRO CAPA)")
+           var sublayer1 = layers[1].getSubLayer(4);
+
+           sublayer1.infowindow.set('sanitizeTemplate',false);
+
+           sublayer1.infowindow.set('template', $('#infowindow_template').html());
+
+      		// you can get the native map to work with it
+      		var map = vis.getNativeMap();
+
+          // now, perform any operations you need
+          // map.setZoom(3);
+          map.panTo([-25.1447, -56.3435]);
+
+          }).on('error', function() {
+            console.log("some error occurred");
+          });
+      }
+
+      window.onload = main;
+  
+      $(document).ready(function(){
+      $(".nav-tabs a").click(function(){
+      $(this).tab('show');
+      });
+      });
+    </script>
+
+</html>
+
